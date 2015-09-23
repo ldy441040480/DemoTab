@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.ldy.scale.indicator.ScaleTabLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_tab"
     android:layout_width="match_parent"
     android:layout_height="40dp"
@@ -14,8 +13,7 @@
         android:gravity="center"
         android:layout_weight="1"
         android:text="三里屯"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
+        android:textSize="18sp"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
@@ -23,8 +21,7 @@
         android:gravity="center"
         android:layout_weight="1"
         android:text="优衣库"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
+        android:textSize="18sp"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
@@ -32,9 +29,7 @@
         android:gravity="center"
         android:layout_weight="1"
         android:text="陈冠希"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
-
+        android:textSize="18sp"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
@@ -42,7 +37,6 @@
         android:gravity="center"
         android:layout_weight="1"
         android:text="艳照门"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
+        android:textSize="18sp"/>
 
 </com.ldy.scale.indicator.ScaleTabLayout>

@@ -7,18 +7,22 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Created by lidongyang on 2015/7/26.
  */
 public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener, OnClickListener {
 
-    private static final int BOTTOM_DIPS = 2;
+    private static final int BOTTOM_HIGHT_DIPS = 2;
+    private static final int BOTTOM_WITDH_DIPS = 20;
     private static final int BOTTOM_COLOR = Color.parseColor("#FF9AA0");
 
     private Paint mPaint;
@@ -159,8 +163,6 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
         View view = getChildAt(position);
         if (view instanceof ScaleTextView) {
             ((ScaleTextView) view).setTabScale(scale);
-        } else if (view instanceof ScaleView) {
-            ((ScaleView) view).setTabScale(scale);
         }
     }
 
@@ -189,8 +191,8 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
             right = (int) (mMoveOffset * nextTitle.getRight() +
                     (1.0f - mMoveOffset) * right);
         }
-        int space = (right - left) / (mCount * 2);
-        canvas.drawRect(left + space, height - (int) (BOTTOM_DIPS * mDensity),
+        float space = BOTTOM_WITDH_DIPS * mDensity;
+        canvas.drawRect(left + space, height - (int) (BOTTOM_HIGHT_DIPS * mDensity),
                 right - space, height, mPaint);
     }
 
