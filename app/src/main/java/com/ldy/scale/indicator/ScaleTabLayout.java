@@ -1,37 +1,45 @@
 package com.ldy.scale.indicator;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.example.administrator.demotab.R;
 
 /**
  * Created by lidongyang on 2015/7/26.
  */
 public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener, OnClickListener {
 
-    private static final int BOTTOM_DIPS = 2;
-    private static final int BOTTOM_COLOR = Color.parseColor("#FF9AA0");
+    private static final int BOTTOM_COLOR = 0xFFF5D336;
 
     private Paint mPaint;
-    private float mDensity;
     private int mCount;
     private int mLastPosition;
     private int mCurrPosition;
 
-    private int mBottomColor = BOTTOM_COLOR;
+    private int mBottomColor;
+    private int mBottomHeight;
+
     private int mMovePosition;
     private float mMoveOffset;
 
     private boolean isClick = false;
+    /** 下划线是否随文字宽度 */
+    private boolean isFitText= false;
+    /** 下划线左右边距 */
+    private int linePaddingStart = 0;
+    private int linePaddingEnd = 0;
+    private int linePaddingBottom = 0;
+
     private ViewPager mPager;
     private OnTabItemClickListener mTabClicklistener;
     private OnScalePageChangeListener onPagerChangeListener;
@@ -42,25 +50,30 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
 
     public ScaleTabLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initAttrs(context, attrs);
+    }
+
+    private void initAttrs(Context context, AttributeSet attrs) {
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ScaleLayout);
+        mBottomColor = array.getColor(R.styleable.ScaleLayout_bottom_color, BOTTOM_COLOR);
+        mBottomHeight = array.getDimensionPixelSize(R.styleable.ScaleLayout_bottom_height, 2);
+        isFitText = array.getBoolean(R.styleable.ScaleLayout_fit_text, true);
+        linePaddingStart = array.getDimensionPixelSize(R.styleable.ScaleLayout_line_left, 0);
+        linePaddingEnd = array.getDimensionPixelSize(R.styleable.ScaleLayout_line_right, 0);
+        linePaddingBottom = array.getDimensionPixelSize(R.styleable.ScaleLayout_line_bottom, 0);
+        array.recycle();
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mDensity = getResources().getDisplayMetrics().density;
         mPaint = new Paint();
-        mPaint.setColor(mBottomColor);
         mCount = getChildCount();
 
         for (int i = 0; i < mCount; i ++) {
             getChildAt(i).setOnClickListener(this);
             getChildAt(i).setTag(i);
         }
-    }
-
-    public void setBottomColor(int color) {
-        this.mBottomColor = color;
-        invalidate();
     }
 
     public void setViewPager(ViewPager pager) {
@@ -126,6 +139,7 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
             setTabScale(position, 1 - positionOffset);
             setTabScale(position + 1, positionOffset);
         }
+
         setMoveLine(position, positionOffset);
 
         if (onPagerChangeListener != null) {
@@ -159,8 +173,6 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
         View view = getChildAt(position);
         if (view instanceof ScaleTextView) {
             ((ScaleTextView) view).setTabScale(scale);
-        } else if (view instanceof ScaleView) {
-            ((ScaleView) view).setTabScale(scale);
         }
     }
 
@@ -179,19 +191,41 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
     @Override
     protected void onDraw(Canvas canvas) {
         final int height = getHeight();
+
+        mPaint.setColor(mBottomColor);
+
         View selected = getChildAt(mMovePosition);
-        int left = selected.getLeft();
-        int right = selected.getRight();
+        int left = getLeft(selected);
+        int right = getRight(selected);
         if (mMoveOffset > 0f && mMovePosition < (getChildCount() - 1)) {
             View nextTitle = getChildAt(mMovePosition + 1);
-            left = (int) (mMoveOffset * nextTitle.getLeft() +
+            left = (int) (mMoveOffset * getLeft(nextTitle) +
                     (1.0f - mMoveOffset) * left);
-            right = (int) (mMoveOffset * nextTitle.getRight() +
+            right = (int) (mMoveOffset * getRight(nextTitle) +
                     (1.0f - mMoveOffset) * right);
         }
-        int space = (right - left) / (mCount * 2);
-        canvas.drawRect(left + space, height - (int) (BOTTOM_DIPS * mDensity),
-                right - space, height, mPaint);
+
+        canvas.drawRect(left, height - mBottomHeight - linePaddingBottom, right, height - linePaddingBottom, mPaint);
+    }
+
+    private int getLeft(View view) {
+        if ((view instanceof TextView) && isFitText) {
+            return view.getLeft() + view.getWidth() / 2 - (int) getTextWidth((TextView) view) / 2;
+        } else {
+            return view.getLeft() + linePaddingStart;
+        }
+    }
+
+    private int getRight(View view) {
+        if ((view instanceof TextView) && isFitText) {
+            return view.getRight() - view.getWidth() / 2+ (int) getTextWidth((TextView) view) / 2;
+        } else {
+            return view.getRight() - linePaddingEnd;
+        }
+    }
+
+    private float getTextWidth(TextView textView) {
+        return textView.getPaint().measureText(textView.getText().toString());
     }
 
     public void setOnTabItemClickListener(OnTabItemClickListener listener) {
