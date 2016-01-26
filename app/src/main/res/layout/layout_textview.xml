@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.ldy.scale.indicator.ScaleTabLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:scale="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_tab"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:orientation="horizontal"
-    android:background="#7cd7d6">
+    android:background="#FFFFFF"
+    scale:bottom_color="#F5D336"
+    scale:bottom_height="1dp">
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
@@ -14,17 +16,23 @@
         android:gravity="center"
         android:layout_weight="1"
         android:text="三里屯"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
+        android:textSize="16sp"
+        scale:isScale="false"
+        scale:fit_text="true"
+        scale:fromColor="#F5D336"
+        scale:toColor="#98A8AA"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="优衣库"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
+        android:text="优库"
+        android:textSize="16sp"
+        scale:isScale="false"
+        scale:fit_text="true"
+        scale:fromColor="#F5D336"
+        scale:toColor="#98A8AA"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
@@ -32,8 +40,11 @@
         android:gravity="center"
         android:layout_weight="1"
         android:text="陈冠希"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
+        android:textSize="16sp"
+        scale:isScale="false"
+        scale:fit_text="true"
+        scale:fromColor="#F5D336"
+        scale:toColor="#98A8AA"/>
 
 
     <com.ldy.scale.indicator.ScaleTextView
@@ -41,8 +52,11 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="艳照门"
-        app:minSize="16sp"
-        app:maxSize="20sp"/>
+        android:text="艳门"
+        android:textSize="16sp"
+        scale:isScale="false"
+        scale:fit_text="true"
+        scale:fromColor="#F5D336"
+        scale:toColor="#98A8AA"/>
 
 </com.ldy.scale.indicator.ScaleTabLayout>
