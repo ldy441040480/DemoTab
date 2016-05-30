@@ -52,7 +52,10 @@ public class ItemFragment extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("babytree://topicdetail?discuz_id=MzcwMDk0MTg=")));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("babytree://knowledge?knowledge_id=7266"));
+                intent.putExtra("base64", false);
+
+                startActivity(intent);
             }
         });
         return textView;
