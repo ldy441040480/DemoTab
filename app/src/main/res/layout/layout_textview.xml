@@ -8,7 +8,8 @@
     android:orientation="horizontal"
     android:background="#FFFFFF"
     scale:bottom_color="#F5D336"
-    scale:bottom_height="1dp">
+    scale:bottom_height="1dp"
+    scale:fit_text="true">
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
@@ -18,7 +19,6 @@
         android:text="三里屯"
         android:textSize="16sp"
         scale:isScale="false"
-        scale:fit_text="true"
         scale:fromColor="#F5D336"
         scale:toColor="#98A8AA"/>
 
@@ -30,7 +30,6 @@
         android:text="优库"
         android:textSize="16sp"
         scale:isScale="false"
-        scale:fit_text="true"
         scale:fromColor="#F5D336"
         scale:toColor="#98A8AA"/>
 
@@ -42,10 +41,8 @@
         android:text="陈冠希"
         android:textSize="16sp"
         scale:isScale="false"
-        scale:fit_text="true"
         scale:fromColor="#F5D336"
         scale:toColor="#98A8AA"/>
-
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
@@ -55,7 +52,6 @@
         android:text="艳门"
         android:textSize="16sp"
         scale:isScale="false"
-        scale:fit_text="true"
         scale:fromColor="#F5D336"
         scale:toColor="#98A8AA"/>
 
