@@ -9,7 +9,7 @@
     mTabLayout = (ScaleTabLayout) findViewById(R.id.layout_tab);
     mTabLayout.setViewPager(mViewPager);
     
-   <declare-styleable name="ScaleLayout">
+    <declare-styleable name="ScaleLayout">
         <attr name="bottom_color" format="color|reference" />
         <attr name="bottom_height" format="dimension" />
         <attr name="line_right" format="dimension" />
