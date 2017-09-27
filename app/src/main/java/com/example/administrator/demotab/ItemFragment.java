@@ -1,7 +1,5 @@
 package com.example.administrator.demotab;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  *  Created by lidongyang on 2015/7/26.
@@ -52,10 +51,7 @@ public class ItemFragment extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("babytree://knowledge?knowledge_id=7266"));
-                intent.putExtra("base64", false);
-
-                startActivity(intent);
+                Toast.makeText(getActivity(), "-->" + mTitle, Toast.LENGTH_SHORT).show();
             }
         });
         return textView;
