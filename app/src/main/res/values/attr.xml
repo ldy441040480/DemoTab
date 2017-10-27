@@ -2,22 +2,22 @@
 <resources>
 
     <declare-styleable name="ScaleLayout">
-        <attr name="bottom_color" format="color|reference" />
-        <attr name="bottom_height" format="dimension" />
-        <attr name="line_right" format="dimension" />
-        <attr name="line_left" format="dimension" />
-        <attr name="line_bottom" format="dimension" />
-        <attr name="fit_text" format="boolean" />
+        <attr name="bottomHeight" format="dimension"/>
+        <attr name="lineRight" format="dimension"/>
+        <attr name="lineLeft" format="dimension"/>
+        <attr name="lineBottom" format="dimension"/>
+        <attr name="fitText" format="boolean"/>
+        <attr name="changeColor" format="boolean"/>
+        <attr name="changeBottomColor" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ScaleView">
-        <attr name="text" format="string" />
-        <attr name="minSize" format="dimension" />
-        <attr name="maxSize" format="dimension" />
-        <attr name="fromColor" format="color|reference" />
-        <attr name="toColor" format="color|reference" />
-        <attr name="isScale" format="boolean" />
-        <attr name="isChangeColor" format="boolean" />
+        <attr name="text" format="string"/>
+        <attr name="minSize" format="dimension"/>
+        <attr name="maxSize" format="dimension"/>
+        <attr name="fromColor" format="color|reference"/>
+        <attr name="toColor" format="color|reference"/>
+        <attr name="isScale" format="boolean"/>
     </declare-styleable>
 
 </resources>

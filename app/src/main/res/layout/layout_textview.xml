@@ -4,55 +4,66 @@
     xmlns:scale="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_tab"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="44dp"
     android:orientation="horizontal"
     android:background="#FFFFFF"
-    scale:bottom_color="#F5D336"
-    scale:bottom_height="1dp"
-    scale:fit_text="true">
+    scale:bottomHeight="2dp"
+    scale:fitText="false"
+    scale:changeColor="true"
+    scale:changeBottomColor="true"
+    scale:lineLeft="7dp"
+    scale:lineRight="7dp">
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="三里屯"
-        android:textSize="16sp"
-        scale:isScale="false"
+        android:text="全部"
+        android:textSize="14sp"
+        scale:minSize="15sp"
+        scale:maxSize="17sp"
+        scale:isScale="true"
         scale:fromColor="#F5D336"
-        scale:toColor="#98A8AA"/>
+        scale:toColor="#444444"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="优库"
-        android:textSize="16sp"
-        scale:isScale="false"
-        scale:fromColor="#F5D336"
-        scale:toColor="#98A8AA"/>
+        android:text="体展展"
+        android:textSize="14sp"
+        scale:minSize="15sp"
+        scale:maxSize="17sp"
+        scale:isScale="true"
+        scale:fromColor="#0078c8"
+        scale:toColor="#444444"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="陈冠希"
-        android:textSize="16sp"
-        scale:isScale="false"
-        scale:fromColor="#F5D336"
-        scale:toColor="#98A8AA"/>
+        android:text="社绪"
+        android:textSize="14sp"
+        scale:minSize="15sp"
+        scale:maxSize="17sp"
+        scale:isScale="true"
+        scale:fromColor="#00c1d5"
+        scale:toColor="#444444"/>
 
     <com.ldy.scale.indicator.ScaleTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="艳门"
-        android:textSize="16sp"
-        scale:isScale="false"
-        scale:fromColor="#F5D336"
-        scale:toColor="#98A8AA"/>
+        android:text="认知知"
+        android:textSize="14sp"
+        scale:minSize="15sp"
+        scale:maxSize="17sp"
+        scale:isScale="true"
+        scale:fromColor="#ef4123"
+        scale:toColor="#444444"/>
 
 </com.ldy.scale.indicator.ScaleTabLayout>

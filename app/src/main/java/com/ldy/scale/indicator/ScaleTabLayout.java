@@ -3,6 +3,7 @@ package com.ldy.scale.indicator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -19,14 +20,11 @@ import com.example.administrator.demotab.R;
  */
 public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener, OnClickListener {
 
-    private static final int BOTTOM_COLOR = 0xFFF5D336;
-
     private Paint mPaint;
     private int mCount;
     private int mLastPosition;
     private int mCurrPosition;
 
-    private int mBottomColor;
     private int mBottomHeight;
 
     private int mMovePosition;
@@ -39,10 +37,13 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
     private int linePaddingStart = 0;
     private int linePaddingEnd = 0;
     private int linePaddingBottom = 0;
+    private boolean isChangeColor;
+    private boolean isChangeBottomColor;
 
     private ViewPager mPager;
-    private OnTabItemClickListener mTabClicklistener;
+    private OnTabItemClickListener mTabClickListener;
     private OnScalePageChangeListener onPagerChangeListener;
+    private ScaleTextView[] mScaleViews;
 
     public ScaleTabLayout(Context context) {
         super(context);
@@ -55,12 +56,13 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
 
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ScaleLayout);
-        mBottomColor = array.getColor(R.styleable.ScaleLayout_bottom_color, BOTTOM_COLOR);
-        mBottomHeight = array.getDimensionPixelSize(R.styleable.ScaleLayout_bottom_height, 2);
-        isFitText = array.getBoolean(R.styleable.ScaleLayout_fit_text, true);
-        linePaddingStart = array.getDimensionPixelSize(R.styleable.ScaleLayout_line_left, 0);
-        linePaddingEnd = array.getDimensionPixelSize(R.styleable.ScaleLayout_line_right, 0);
-        linePaddingBottom = array.getDimensionPixelSize(R.styleable.ScaleLayout_line_bottom, 0);
+        mBottomHeight = array.getDimensionPixelSize(R.styleable.ScaleLayout_bottomHeight, 2);
+        isFitText = array.getBoolean(R.styleable.ScaleLayout_fitText, true);
+        linePaddingStart = array.getDimensionPixelSize(R.styleable.ScaleLayout_lineLeft, 0);
+        linePaddingEnd = array.getDimensionPixelSize(R.styleable.ScaleLayout_lineRight, 0);
+        linePaddingBottom = array.getDimensionPixelSize(R.styleable.ScaleLayout_lineBottom, 0);
+        isChangeColor = array.getBoolean(R.styleable.ScaleLayout_changeColor, true);
+        isChangeBottomColor = array.getBoolean(R.styleable.ScaleLayout_changeBottomColor, false);
         array.recycle();
     }
 
@@ -69,10 +71,11 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
         super.onFinishInflate();
         mPaint = new Paint();
         mCount = getChildCount();
-
-        for (int i = 0; i < mCount; i ++) {
-            getChildAt(i).setOnClickListener(this);
-            getChildAt(i).setTag(i);
+        mScaleViews = new ScaleTextView[mCount];
+        for (int i = 0; i < mCount; i++) {
+            mScaleViews[i] = (ScaleTextView) getChildAt(i);
+            mScaleViews[i].setOnClickListener(this);
+            mScaleViews[i].setTag(i);
         }
     }
 
@@ -87,6 +90,25 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
         mPager.setCurrentItem(position, false);
     }
 
+    public void setTabTitles(String[] titles) {
+        for (int i = 0; i < mCount; i++) {
+            mScaleViews[i].setText(titles[i]);
+        }
+    }
+
+    public void setTabColor(int[] colors) {
+        for (int i = 0; i < mCount; i++) {
+            mScaleViews[i].setFromColor(colors[i]);
+        }
+    }
+
+    public void setTabsTitleAndColor(String[] titles, int[] colors) {
+        for (int i = 0; i < mCount; i++) {
+            mScaleViews[i].setText(titles[i]);
+            mScaleViews[i].setFromColor(colors[i]);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         if (mPager != null) {
@@ -95,8 +117,8 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
             int position = (Integer) v.getTag();
             mPager.setCurrentItem(position);
 
-            if (mTabClicklistener != null) {
-                mTabClicklistener.onTabClick(v, position);
+            if (mTabClickListener != null) {
+                mTabClickListener.onTabClick(v, position);
             }
         }
     }
@@ -170,9 +192,12 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
         if (position < 0 || position >= mCount) {
             return;
         }
-        View view = getChildAt(position);
-        if (view instanceof ScaleTextView) {
-            ((ScaleTextView) view).setTabScale(scale);
+        ScaleTextView view = mScaleViews[position];
+        if (isChangeColor) {
+            int curColor = getCurColor(view.getFromColor(), view.getToColor(), scale);
+            view.setTabScale(scale, curColor, isChangeColor);
+        } else {
+            view.setTabScale(scale, view.getFromColor(), isChangeColor);
         }
     }
 
@@ -192,17 +217,29 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
     protected void onDraw(Canvas canvas) {
         final int height = getHeight();
 
-        mPaint.setColor(mBottomColor);
+        ScaleTextView selected = mScaleViews[mMovePosition];
+        mPaint.setColor(selected.getFromColor());
 
-        View selected = getChildAt(mMovePosition);
         int left = getLeft(selected);
         int right = getRight(selected);
         if (mMoveOffset > 0f && mMovePosition < (getChildCount() - 1)) {
-            View nextTitle = getChildAt(mMovePosition + 1);
+            ScaleTextView nextTitle = mScaleViews[mMovePosition + 1];
+
             left = (int) (mMoveOffset * getLeft(nextTitle) +
                     (1.0f - mMoveOffset) * left);
             right = (int) (mMoveOffset * getRight(nextTitle) +
                     (1.0f - mMoveOffset) * right);
+
+            if (isChangeBottomColor) {
+                int curColor = getCurColor(nextTitle.getChangeColor(), selected.getChangeColor(), mMoveOffset);
+                mPaint.setColor(curColor);
+            } else {
+                if (mMoveOffset > 0.5f) {
+                    mPaint.setColor(nextTitle.getFromColor());
+                } else {
+                    mPaint.setColor(selected.getFromColor());
+                }
+            }
         }
 
         canvas.drawRect(left, height - mBottomHeight - linePaddingBottom, right, height - linePaddingBottom, mPaint);
@@ -229,7 +266,7 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
     }
 
     public void setOnTabItemClickListener(OnTabItemClickListener listener) {
-        this.mTabClicklistener = listener;
+        this.mTabClickListener = listener;
     }
 
     public interface OnTabItemClickListener {
@@ -248,4 +285,16 @@ public class ScaleTabLayout extends LinearLayout implements OnPageChangeListener
 
         void onPageScrollStateChanged(int state);
     }
+
+    private int getCurColor(int maxColor, int minColor, float offset) {
+        int r = getColor(Color.red(maxColor), Color.red(minColor), offset);
+        int b = getColor(Color.blue(maxColor), Color.blue(minColor), offset);
+        int g = getColor(Color.green(maxColor), Color.green(minColor), offset);
+        return Color.rgb(r, g, b);
+    }
+
+    private int getColor(int maxValue, int minValue, float offset) {
+        return (int) ((float) (maxValue - minValue) * (offset) + (float) minValue);
+    }
+
 }
